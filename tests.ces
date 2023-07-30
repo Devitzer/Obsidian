@@ -1,0 +1,12 @@
+# A COMMENT OMGOMGOMG
+
+let object_hehe = {
+    hello: "Hello, World!",
+    goodbye: {
+        one: "Goodbye!",
+        two: "Cya!"
+    }
+}
+
+sys.exit(1)
+io.error(object_hehe.hello)

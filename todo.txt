@@ -1,0 +1,4 @@
+not in this order neccesarily
+
+Support negative integers
+Make adding strings possible: "Hello! " + "Goodbye!" gives "Hello! Goodbye!", and it will be treated as a BinaryExpr.
