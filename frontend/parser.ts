@@ -55,7 +55,6 @@ export default class Parser {
             program.body.push(this.parse_stmt());
         }
 
-        console.log(program);
         return program;
     }
 
