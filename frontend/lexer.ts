@@ -27,13 +27,15 @@ export enum TokenType {
     // Keywords
     Let,
     Static,
+    Import,
 
     EOF, // END OF FILE
 }
 
 const KEYWORDS: Record<string, TokenType> = {
     let: TokenType.Let,
-    static: TokenType.Static
+    static: TokenType.Static,
+    import: TokenType.Import
 }
 
 export interface Token {

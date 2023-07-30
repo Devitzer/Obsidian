@@ -3,6 +3,7 @@ export type NodeType =
     // STATEMENTS
     | "Program"
     | "VarDeclaration"
+    | "ImportDeclaration"
 
     // EXPRESSIONS
     | "AssignmentExpr"
@@ -31,6 +32,12 @@ export interface VarDeclaration extends Stmt {
     static: boolean;
     identifier: string;
     value?: Expr;
+}
+
+export interface ImportDeclaration extends Stmt {
+    kind: "ImportDeclaration"
+    builtInLibrary: boolean;
+    identifier: string;
 }
 
 

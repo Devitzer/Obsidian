@@ -12,7 +12,8 @@ Property,
 ObjectLiteral,
 StringLiteral,
 CallExpr,
-MemberExpr, 
+MemberExpr,
+ImportDeclaration, 
 } from "./ast.ts";
 import { tokenize, Token, TokenType } from "./lexer.ts";
 
@@ -54,6 +55,7 @@ export default class Parser {
             program.body.push(this.parse_stmt());
         }
 
+        console.log(program);
         return program;
     }
 
@@ -63,9 +65,27 @@ export default class Parser {
             case TokenType.Let:
             case TokenType.Static:
                 return this.parse_var_declaration();
+            case TokenType.Import:
+                return this.parse_import_declaration();
             default:
                 return this.parse_expr();
         }
+    }
+
+    private parse_import_declaration(): Stmt {
+    this.eat(); // eat the import token
+    let builtInLibrary: boolean;
+    const identifier: string = this.at().value;
+    if (identifier == "fs") {
+        builtInLibrary = true;
+    } else {
+        throw `This language only supports built in libraries for now.`
+    }
+
+    this.eat(); // eat past identifier
+
+    return { kind: "ImportDeclaration", builtInLibrary, identifier } as ImportDeclaration;
+
     }
 
     private parse_var_declaration(): Stmt {

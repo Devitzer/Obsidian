@@ -1,12 +1,5 @@
-# A COMMENT OMGOMGOMG
+import fs
 
-let object_hehe = {
-    hello: "Hello, World!",
-    goodbye: {
-        one: "Goodbye!",
-        two: "Cya!"
-    }
-}
+let todo = fs.readFile("todo.txt")
 
-sys.exit(1)
-io.error(object_hehe.hello)
+io.print(todo)
