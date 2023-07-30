@@ -4,15 +4,14 @@ import { evaluate } from "./runtime/interpreter.ts";
 
 run("tests.ces");
 
-async function run(filename: string) {
+export default async function run(filename: string) {
     const parser = new Parser();
     const env = createGlobalEnv();
 
     const input = await Deno.readTextFile(filename);
     const program = parser.produceAST(input);
     const result = evaluate(program, env);
-    // console.log(result);
-    // for when i need it
+    return result;
 }
 
 function _repl () {
