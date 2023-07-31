@@ -34,6 +34,10 @@ export interface StringVal extends RuntimeVal {
     value: string
 }
 
+export function MK_STRING(str = "") {
+    return { type: "string", value: str } as StringVal;
+}
+
 export interface ObjectVal extends RuntimeVal {
     type: "object",
     properties: Map<string, RuntimeVal>;

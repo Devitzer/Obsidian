@@ -1,7 +1,7 @@
 import { AssignmentExpr, BinaryExpr,CallExpr,Expr,Identifier, MemberExpr, ObjectLiteral } from "../../frontend/ast.ts";
 import Environment from "../environment.ts";
 import { evaluate } from "../interpreter.ts";
-import { NumberVal, MK_NUMBER, RuntimeVal, MK_NULL, ObjectVal, NativeFnValue, StringVal } from "../values.ts";
+import { NumberVal, MK_NUMBER, RuntimeVal, MK_NULL, ObjectVal, NativeFnValue, StringVal, MK_STRING } from "../values.ts";
 
 function eval_numeric_binary_expr(lhs: NumberVal, rhs: NumberVal, operator: string): NumberVal {
     let result = 0;
@@ -39,10 +39,23 @@ export function eval_binary_expr(binop: BinaryExpr, env: Environment): RuntimeVa
 
     if (lhs.type == "number" && rhs.type == "number") {
         return eval_numeric_binary_expr(lhs as NumberVal, rhs as NumberVal, binop.operator);
+    } else if (lhs.type == "string" || rhs.type == "string") {
+        return eval_string_binary_expr(lhs as StringVal, rhs as StringVal, binop.operator);
     }
 
     return MK_NULL(); 
 
+}
+
+function eval_string_binary_expr(lhs: StringVal, rhs: StringVal, operator: string): StringVal {
+    let result = "";
+    if (operator == "+") {
+        result = lhs.value + rhs.value;
+    } else {
+        throw `You can only add strings together, not anything else.`
+    }
+
+    return MK_STRING(result);
 }
 
 export function eval_identifier(ident: Identifier, env: Environment): RuntimeVal {

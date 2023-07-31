@@ -1,5 +1,3 @@
-import fs
+let monk = "hi " + 1
 
-let todo = fs.readFile("todo.txt")
-
-io.print(todo)
+io.print(monk)
