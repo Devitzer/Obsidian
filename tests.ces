@@ -1,3 +1,14 @@
-let monk = "hi " + 1
+# In this file, I will show you everything you can do in CitrineScript!
+import fs
 
-io.print(monk)
+fs.writeFile("hello.txt", "Hello!")
+sys.sleep(2000)
+fs.deleteFile("hello.txt") # Guess we will say goodbye to hello.txt...
+io.print("NOOOO HELLO.TXT ")
+sys.sleep(500)
+
+let x = 1+1
+let y = (12 / 43) + x
+let z = y + x + (y * x) + (y % 123)
+
+io.print(z) # some abstract math...

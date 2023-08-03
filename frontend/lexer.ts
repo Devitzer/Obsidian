@@ -28,6 +28,9 @@ export enum TokenType {
     Let,
     Static,
     Import,
+    Int,
+    Str,
+
 
     EOF, // END OF FILE
 }
@@ -35,6 +38,8 @@ export enum TokenType {
 const KEYWORDS: Record<string, TokenType> = {
     let: TokenType.Let,
     static: TokenType.Static,
+    int: TokenType.Int,
+    str: TokenType.Str,
     import: TokenType.Import
 }
 

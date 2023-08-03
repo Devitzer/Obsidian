@@ -1,7 +1,7 @@
 Only here because I want them to be in a neat list
 
-VarDeclaration: let/static x = 1, let x;
 ImportDeclaration: import fs
+VarDeclaration: let/static x = 1, let x;
 AssignmentExpr: x = "herro"
 ObjectExpr: {}
 AdditiveExpr: + -

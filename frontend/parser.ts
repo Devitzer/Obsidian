@@ -75,7 +75,7 @@ export default class Parser {
     this.eat(); // eat the import token
     let builtInLibrary: boolean;
     const identifier: string = this.at().value;
-    if (identifier == "fs") {
+    if (identifier == "fs" || identifier == "test") {
         builtInLibrary = true;
     } else {
         throw `This language only supports built in libraries for now.`

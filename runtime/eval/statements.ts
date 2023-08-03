@@ -24,6 +24,8 @@ export function eval_import_declaration(declaration: ImportDeclaration, env: Env
     if (declaration.builtInLibrary == true) {
         if (declaration.identifier == "fs") {
             fsObj.set("readFile", MK_NATIVE_FN(Native.fs.readFile));
+            fsObj.set("writeFile", MK_NATIVE_FN(Native.fs.writeFile));
+            fsObj.set("deleteFile", MK_NATIVE_FN(Native.fs.deleteFile));
             value = fsObj;
         }
     }

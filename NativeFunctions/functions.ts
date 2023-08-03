@@ -12,6 +12,7 @@ export default function createNativeFunctions(env: Environment) {
     timeObj.set("unix", MK_NATIVE_FN(Native.Date.unix))
     const sysObj: Map<string, RuntimeVal> = new Map();
     sysObj.set("exit", MK_NATIVE_FN(Native.sys.exit));
+    sysObj.set("sleep", MK_NATIVE_FN(Native.sys.sleep));
     
     // PRINT FUNC
     env.declareVar("io", MK_OBJECT(ioObj), true);

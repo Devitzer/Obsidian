@@ -1,7 +1,9 @@
 import exit from "./exit.ts";
+import sleep from "./sleep.ts";
 
 const sys = {
-    exit
+    exit,
+    sleep
 }
 
 export default sys
