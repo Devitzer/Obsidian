@@ -13,7 +13,8 @@ ObjectLiteral,
 StringLiteral,
 CallExpr,
 MemberExpr,
-ImportDeclaration, 
+ImportDeclaration,
+FunctionDeclaration, 
 } from "./ast.ts";
 import { tokenize, Token, TokenType } from "./lexer.ts";
 
@@ -66,16 +67,51 @@ export default class Parser {
                 return this.parse_var_declaration();
             case TokenType.Import:
                 return this.parse_import_declaration();
+            case TokenType.Declare:
+                return this.parse_declare();
             default:
                 return this.parse_expr();
         }
+    }
+
+    private parse_declare(): Stmt {
+        this.eat(); // eat past the declare keyword
+        const name = this.expect(TokenType.Identifier, "Expected identifier following the declare keyword.").value;
+        const args = this.parse_args();
+        const params: string[] = [];
+
+        for (const arg of args) {
+            if (arg.kind !== "Identifier") {
+                console.log(arg);
+                throw `^^^^ You cannot give a parameter to a function declaration which is not an identifier!`
+            }
+
+            params.push((arg as Identifier).symbol);
+        }
+
+        this.expect(TokenType.OpenBrace, "Expected opening brace >> { << following a function declaration.");
+        const body: Stmt[] = [];
+
+        while (this.at().type !== TokenType.CloseBrace && this.at().type !== TokenType.EOF) {
+            body.push(this.parse_stmt());
+        }
+
+        this.expect(TokenType.CloseBrace, "Expected closing brace >> } << for a function body.");
+        const declare = {
+            kind: "FunctionDeclaration",
+            body,
+            name,
+            parameters: params
+        } as FunctionDeclaration;
+
+        return declare;
     }
 
     private parse_import_declaration(): Stmt {
     this.eat(); // eat the import token
     let builtInLibrary: boolean;
     const identifier: string = this.at().value;
-    if (identifier == "fs" || identifier == "test") {
+    if (identifier == "fs") {
         builtInLibrary = true;
     } else {
         throw `This language only supports built in libraries for now.`

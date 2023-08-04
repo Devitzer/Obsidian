@@ -1,14 +1,12 @@
-# In this file, I will show you everything you can do in CitrineScript!
-import fs
+# In this file, you will see usually the newest features or an empty file.
 
-fs.writeFile("hello.txt", "Hello!")
-sys.sleep(2000)
-fs.deleteFile("hello.txt") # Guess we will say goodbye to hello.txt...
-io.print("NOOOO HELLO.TXT ")
-sys.sleep(500)
+declare add (x, y) {
+    let result = x + y
+    io.print(result)
 
-let x = 1+1
-let y = (12 / 43) + x
-let z = y + x + (y * x) + (y % 123)
+    result
+}
 
-io.print(z) # some abstract math...
+static result = add(10, 4)
+
+io.print(result)

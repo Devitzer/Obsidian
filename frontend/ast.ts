@@ -4,6 +4,7 @@ export type NodeType =
     | "Program"
     | "VarDeclaration"
     | "ImportDeclaration"
+    | "FunctionDeclaration"
 
     // EXPRESSIONS
     | "AssignmentExpr"
@@ -40,6 +41,12 @@ export interface ImportDeclaration extends Stmt {
     identifier: string;
 }
 
+export interface FunctionDeclaration extends Stmt {
+    kind: "FunctionDeclaration";
+    parameters: string[];
+    name: string;
+    body: Stmt[];
+}
 
 export interface Expr extends Stmt {}
 

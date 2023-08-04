@@ -1,6 +1,7 @@
+import { Stmt } from "../frontend/ast.ts";
 import Environment from "./environment.ts";
 
-export type ValueType = "null" | "number" | "boolean"| "string" | "object" | "native-fn";
+export type ValueType = "null" | "number" | "boolean"| "string" | "object" | "native-fn" | "function";
 
 export interface RuntimeVal {
     type: ValueType;
@@ -56,6 +57,14 @@ export interface NativeFnValue extends RuntimeVal {
 
 export function MK_NATIVE_FN (call: FunctionCall) {
     return { type: "native-fn", call } as NativeFnValue;
+}
+
+export interface FunctionValue extends RuntimeVal {
+    type: "function";
+    name: string;
+    parameters: string[];
+    declarationEnv: Environment;
+    body: Stmt[];
 }
 
 export function MK_OBJECT(properties: Map<string, RuntimeVal>) {

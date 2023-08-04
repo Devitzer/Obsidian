@@ -1,7 +1,7 @@
-import { ImportDeclaration, Program, VarDeclaration } from "../../frontend/ast.ts";
+import { FunctionDeclaration, ImportDeclaration, Program, VarDeclaration } from "../../frontend/ast.ts";
 import Environment from "../environment.ts";
 import { evaluate } from "../interpreter.ts";
-import { RuntimeVal, MK_NULL, MK_NATIVE_FN, MK_OBJECT } from "../values.ts";
+import { RuntimeVal, MK_NULL, MK_NATIVE_FN, MK_OBJECT, FunctionValue } from "../values.ts";
 import Native from "../../NativeFunctions/all.ts";
 
 export function eval_program (program: Program, env: Environment): RuntimeVal {
@@ -31,4 +31,18 @@ export function eval_import_declaration(declaration: ImportDeclaration, env: Env
     }
 
     return env.declareVar(declaration.identifier, MK_OBJECT(value), true);
+}
+
+export function eval_function_declaration(declaration: FunctionDeclaration, env: Environment): RuntimeVal {
+    // Create new function scope
+
+    const fn = {
+        type: "function",
+        name: declaration.name,
+        parameters: declaration.parameters,
+        declarationEnv: env,
+        body: declaration.body
+    } as FunctionValue;
+
+    return env.declareVar(declaration.name, fn, true);
 }

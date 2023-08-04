@@ -30,6 +30,7 @@ export enum TokenType {
     Import,
     Int,
     Str,
+    Declare,
 
 
     EOF, // END OF FILE
@@ -40,7 +41,8 @@ const KEYWORDS: Record<string, TokenType> = {
     static: TokenType.Static,
     int: TokenType.Int,
     str: TokenType.Str,
-    import: TokenType.Import
+    import: TokenType.Import,
+    declare: TokenType.Declare
 }
 
 export interface Token {
