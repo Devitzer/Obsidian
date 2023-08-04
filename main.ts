@@ -12,22 +12,24 @@ export async function run(filename: string) {
     return result;
 }
 
+repl();
+
 export function repl () {
     const parser = new Parser();
     const env = createGlobalEnv();
 
-    console.log("\nCitrineScript Repl v0.1");
+    console.log("\nCitrineScript Repl v0.1, Type 'DONE' when done.");
+    let code = "";
     while (true) {
 
         const input = prompt("> ");
-        // Check for no user input or exit keyword.
-        if (!input || input.includes("exit")) {
-            Deno.exit(1);
+        if (input != "DONE") {
+            code += input;
+        } else {
+            const program = parser.produceAST(code);
+            const result = evaluate(program, env);
+            // console.log(result); // for when needed
+            Deno.exit(1)
         }
-
-        const program = parser.produceAST(input);
-
-        const result = evaluate(program, env);
-        console.log(result);
     }
 }
