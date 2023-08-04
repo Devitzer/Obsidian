@@ -12,8 +12,6 @@ export async function run(filename: string) {
     return result;
 }
 
-repl();
-
 export function repl () {
     const parser = new Parser();
     const env = createGlobalEnv();
