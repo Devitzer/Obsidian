@@ -7,7 +7,7 @@ The easy one.
 
 # NOTICE!!
 
-**I have put CitrineScript on a small pause, I am working on a lot of things! Such as learning C, C++ (after c), and I am also working on a TextMate grammar extension for CitrineScript, which means you will get syntax highlighting! I did work on a decent amount of new features before I decided this, so I will publish them. Also, I have been on vacation with family! So, I plan to be back in a week or so; probably earlier. Thank you! Also, to be friendly to beginners, I do plan to update the docs website for these new features ASAP.**
+**If you are reading this, it's because you are in the v2-prep branch, which is not used by the official CLI. If you want to use this, you must set it up manually, USE IT AT YOUR OWN RISK, THERE ARE ACTIVE TEST ITEMS IN THE SOURCE THAT ARE RELEASED WITH BUGS.**
 
 # Welcome!
 
