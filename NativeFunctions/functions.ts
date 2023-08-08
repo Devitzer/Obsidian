@@ -13,12 +13,18 @@ export default function createNativeFunctions(env: Environment) {
     const sysObj: Map<string, RuntimeVal> = new Map();
     sysObj.set("exit", MK_NATIVE_FN(Native.sys.exit));
     sysObj.set("sleep", MK_NATIVE_FN(Native.sys.sleep));
+    const parseObj: Map<string, RuntimeVal> = new Map();
+    parseObj.set("json", MK_NATIVE_FN(Native.parse.json));
+    parseObj.set("yaml", MK_NATIVE_FN(Native.parse.yaml));
+    parseObj.set("toml", MK_NATIVE_FN(Native.parse.toml));
     
-    // PRINT FUNC
+    // STDIO FUNCS
     env.declareVar("io", MK_OBJECT(ioObj), true);
-    // DATE FUNC
+    // DATE FUNCS
     env.declareVar("Date", MK_OBJECT(timeObj), true);
-    // SYS FUNC
+    // SYS FUNCS
     env.declareVar("sys", MK_OBJECT(sysObj), true);
+    // PARSE FUNCS
+    env.declareVar("parse", MK_OBJECT(parseObj), true);
 
 }

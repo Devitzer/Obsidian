@@ -63,4 +63,6 @@ I think you get the point.
 
 CitrineScript Official Documentation: https://citrine.geodax.ca/
 
+[Here's](./CONTRIBUTING.md) how to contribute.
+
 That's it for now!

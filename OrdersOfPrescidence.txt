@@ -1,11 +1,11 @@
 Only here because I want them to be in a neat list
 
 ImportDeclaration: import fs
-VarDeclaration: let/static x = 1, let x;
+VarDeclaration: let/static x = 1, let x; etc.
 AssignmentExpr: x = "herro"
 ObjectExpr: {}
 AdditiveExpr: + -
 MultiplicativeExpr: * /
 CallExpr: func()
-MemberExpr: let x = { foo: bar } x.foo = false
+MemberExpr: let x = { foo: bar } x.foo
 PrimaryExpr: Numbers, Strings, etc.

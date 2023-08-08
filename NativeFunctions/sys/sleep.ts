@@ -1,5 +1,5 @@
 import Environment from "../../runtime/environment.ts";
-import { MK_NULL, NumberVal, RuntimeVal } from "../../runtime/values.ts";
+import { MK_VOID, NumberVal, RuntimeVal } from "../../runtime/values.ts";
 
 function sleepHelper(ms: number) {
     const start = new Date().getTime();
@@ -20,5 +20,5 @@ export default function sleep(args: RuntimeVal[], scope: Environment) {
 
     const theArg = args[0] as NumberVal
     sleepHelper(theArg.value);
-    return MK_NULL();
+    return MK_VOID();
 }

@@ -1,7 +1,7 @@
 import { Stmt } from "../frontend/ast.ts";
 import Environment from "./environment.ts";
 
-export type ValueType = "null" | "number" | "boolean"| "string" | "object" | "native-fn" | "function";
+export type ValueType = "null" | "number" | "boolean"| "string" | "object" | "native-fn" | "function" | "void" | "undefined";
 
 export interface RuntimeVal {
     type: ValueType;
@@ -14,6 +14,24 @@ export interface NullVal extends RuntimeVal {
 
 export function MK_NULL () {
     return { type: "null", value: null } as NullVal
+}
+
+export interface VoidVal extends RuntimeVal {
+    type: "void";
+    value: "void";
+}
+
+export interface UndefinedVal extends RuntimeVal {
+    type: "undefined";
+    value: undefined;
+}
+
+export function MK_UNDEFINED () {
+    return { type: "undefined", value: undefined } as UndefinedVal;
+}
+
+export function MK_VOID () {
+    return { type: "void", value: "void" } as VoidVal;
 }
 
 export interface BooleanVal extends RuntimeVal {

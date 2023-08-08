@@ -3,7 +3,7 @@ import { createGlobalEnv } from "./runtime/environment.ts";
 import { evaluate } from "./runtime/interpreter.ts";
 import { tokenize } from "./frontend/lexer.ts";
 
-run("tests.ces")
+run("tests.ces");
 
 async function run(filename: string) {
     const parser = new Parser();

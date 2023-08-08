@@ -19,6 +19,12 @@ export type NodeType =
     | "Identifier" 
     | "BinaryExpr";
 
+export type StaticTypes =
+    // The static types, such as int or str
+    | "int"
+    | "str"
+    | "dynamic";
+
 export interface Stmt {
     kind: NodeType
 }
@@ -30,6 +36,7 @@ export interface Program extends Stmt {
 
 export interface VarDeclaration extends Stmt {
     kind: "VarDeclaration";
+    type?: StaticTypes;
     static: boolean;
     identifier: string;
     value?: Expr;

@@ -15,6 +15,7 @@ CallExpr,
 MemberExpr,
 ImportDeclaration,
 FunctionDeclaration, 
+StaticTypes,
 } from "./ast.ts";
 import { tokenize, Token, TokenType } from "./lexer.ts";
 
@@ -64,6 +65,8 @@ export default class Parser {
         switch (this.at().type) {
             case TokenType.Let:
             case TokenType.Static:
+            case TokenType.Int:
+            case TokenType.Str:
                 return this.parse_var_declaration();
             case TokenType.Import:
                 return this.parse_import_declaration();
@@ -124,23 +127,52 @@ export default class Parser {
     }
 
     private parse_var_declaration(): Stmt {
+        let type: StaticTypes | undefined;
+        if (this.at().type == TokenType.Let || this.at().type == TokenType.Static) {
+            type = "dynamic";
+        } else if (this.at().type == TokenType.Int) {
+            type = "int";
+        } else if (this.at().type == TokenType.Str) {
+            type = "str";
+        } else {
+            type = undefined;
+        }
         const isStatic = this.eat().type == TokenType.Static;
         const identifier = this.expect(
             TokenType.Identifier, 
-            "Expected identifier following let | static keywords"
+            "Expected identifier following variable declaration keywords"
             ).value;
         
         if (this.at().type == TokenType.Semicolon) {
             this.eat(); // expect semicolon
             if (isStatic) {
-                throw `Must assign value to static expression, if you meant to do it like this, use 'let' instead.`
+                throw `Must assign value to static expression, if you meant to do it like this, use the other variable keywords instead.`
             }
 
-            return { kind: "VarDeclaration", identifier, static: false  } as VarDeclaration;
+            return { kind: "VarDeclaration", identifier, static: false, type  } as VarDeclaration;
         }
 
         this.expect(TokenType.Equals, "Expected value given for variable.");
-        const declaration = { kind: "VarDeclaration", value: this.parse_expr(), identifier, static: isStatic } as VarDeclaration;
+        const value = this.parse_expr();
+        const str = value as StringLiteral;
+        const int = value as NumericLiteral;
+        let finalChoice: Expr | undefined;
+
+        if (type === "int" && value.kind !== "NumericLiteral") {
+            throw `You gave an "int" variable, and the value was NaN.`;
+        } else if (type === "str" && value.kind !== "StringLiteral") {
+            throw `You gave a "str" variable, and the value was not a string.`
+        }
+
+        if (type === "int") {
+            finalChoice = int;
+        } else if (type === "str") {
+            finalChoice = str
+        } else {
+            finalChoice = value;
+        }
+
+        const declaration = { kind: "VarDeclaration", value: finalChoice, identifier, static: isStatic, type } as VarDeclaration;
         return declaration;
     }
 

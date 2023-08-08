@@ -1,6 +1,7 @@
 import Environment from "../../runtime/environment.ts";
-import { RuntimeVal, StringVal, NumberVal, BooleanVal, NullVal, MK_NULL } from "../../runtime/values.ts";
+import { RuntimeVal, StringVal, NumberVal, BooleanVal, NullVal, MK_VOID } from "../../runtime/values.ts";
 
+// deno-lint-ignore no-unused-vars
 export default function print(args: RuntimeVal[], scope: Environment) {
     let final = "";
         for (const arg of args) {
@@ -21,5 +22,5 @@ export default function print(args: RuntimeVal[], scope: Environment) {
             }
         }
     console.log(final)
-    return MK_NULL();
+    return MK_VOID();
 }

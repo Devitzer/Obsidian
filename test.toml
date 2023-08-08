@@ -1,0 +1,5 @@
+hello = "Hello World!"
+
+[bye]
+byeone = "Goodbye!"
+byetwo = "Cya!"

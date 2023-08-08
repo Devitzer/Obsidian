@@ -1,5 +1,5 @@
 import createNativeFunctions from "../NativeFunctions/functions.ts";
-import { MK_BOOL, MK_NULL, RuntimeVal } from "./values.ts";
+import { MK_BOOL, MK_NULL, MK_UNDEFINED, MK_VOID, RuntimeVal } from "./values.ts";
 
 export function createGlobalEnv() {
     const env = new Environment();
@@ -7,6 +7,8 @@ export function createGlobalEnv() {
     env.declareVar("true", MK_BOOL(true), true);
     env.declareVar("false", MK_BOOL(false), true);
     env.declareVar("null", MK_NULL(), true);
+    env.declareVar("void", MK_VOID(), true);
+    env.declareVar("undefined", MK_UNDEFINED(), true);
 
     // native functions
     createNativeFunctions(env);
