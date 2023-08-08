@@ -5,10 +5,6 @@
 
 The easy one.
 
-# NOTICE!!
-
-**I have put CitrineScript on a small pause, I am working on a lot of things! Such as learning C, C++ (after c), and I am also working on a TextMate grammar extension for CitrineScript, which means you will get syntax highlighting! I did work on a decent amount of new features before I decided this, so I will publish them. Also, I have been on vacation with family! So, I plan to be back in a week or so; probably earlier. Thank you! Also, to be friendly to beginners, I do plan to update the docs website for these new features ASAP.**
-
 # Welcome!
 
 Welcome to CitrineScript! CitrineScript is a very simple, light and fun language to learn! In this README, I will show you how to get started, and some resources to help you with this language!
