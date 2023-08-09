@@ -5,10 +5,6 @@
 
 The easy one.
 
-# NOTICE!!
-
-**If you are reading this, it's because you are in the v2-prep branch, which is not used by the official CLI. If you want to use this, you must set it up manually, USE IT AT YOUR OWN RISK, THERE ARE ACTIVE TEST ITEMS IN THE SOURCE THAT ARE RELEASED WITH BUGS.**
-
 # Welcome!
 
 Welcome to CitrineScript! CitrineScript is a very simple, light and fun language to learn! In this README, I will show you how to get started, and some resources to help you with this language!
