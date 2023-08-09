@@ -26,7 +26,7 @@ export function repl () {
             code += input;
         } else {
             const program = parser.produceAST(code);
-            const result = evaluate(program, env);
+            /* const result = */evaluate(program, env);
             // console.log(result); // for when needed
             Deno.exit(1)
         }
