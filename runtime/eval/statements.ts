@@ -1,8 +1,10 @@
-import { FunctionDeclaration, ImportDeclaration, Program, VarDeclaration } from "../../frontend/ast.ts";
+import { FunctionDeclaration, ImportDeclaration, Program, VarDeclaration, IfDeclaration, BinaryExpr } from "../../frontend/ast.ts";
 import Environment from "../environment.ts";
 import { evaluate } from "../interpreter.ts";
-import { RuntimeVal, MK_NULL, MK_NATIVE_FN, MK_OBJECT, FunctionValue } from "../values.ts";
+import { RuntimeVal, MK_NULL, MK_NATIVE_FN, MK_OBJECT, FunctionValue, MK_BOOL, BooleanVal } from "../values.ts";
 import Native from "../../NativeFunctions/all.ts";
+import { areObjectsEqual } from "../../helpers/objects.ts";
+import { binary } from "https://deno.land/std@0.197.0/yaml/_type/binary.ts";
 
 export function eval_program (program: Program, env: Environment): RuntimeVal {
     let lastEvaluated: RuntimeVal = MK_NULL();
@@ -45,4 +47,45 @@ export function eval_function_declaration(declaration: FunctionDeclaration, env:
     } as FunctionValue;
 
     return env.declareVar(declaration.name, fn, true);
+}
+
+export function eval_if_stmt(ifStmt: IfDeclaration, env: Environment): RuntimeVal {
+    // Testing if the condition of the ifStmt is true.
+    let test: BooleanVal = MK_BOOL(false);
+
+    for (const expr of ifStmt.test) {
+        if (expr.kind !== "BinaryExpr") {
+            throw `Expected a Binary Expression for an if test. Example: 1 == 1`;
+        }
+        
+        const binaryexpr = expr as BinaryExpr
+
+        switch (binaryexpr.operator) {
+            case "==":
+                if (binaryexpr.left.kind == binaryexpr.right.kind) {
+                    const evaled = evaluate(binaryexpr.left, env);
+                    const evaled2 = evaluate(binaryexpr.right, env);
+
+                    if (areObjectsEqual(evaled, evaled2)) {
+                        test = MK_BOOL(true);
+                    } else {
+                        test = MK_BOOL(false)
+                    }
+                } else {
+                    test = MK_BOOL(false);
+                }
+                break
+            
+            default:
+                throw `Operator not allowed to be used in If Statement.`
+        }
+    }
+
+    if (test.value === true) {
+        for (const stmt of ifStmt.body) {
+            evaluate(stmt, env);    
+        }
+    }
+
+    return test;
 }

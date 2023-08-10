@@ -11,6 +11,7 @@ export enum TokenType {
     String, // ""
     // Grouping * Operators
     Equals, // =
+    Equals2, // ==
     Comment, // starts on # and ends on \n
     OpenParen, // (
     CloseParen, // )
@@ -31,6 +32,7 @@ export enum TokenType {
     Int,
     Str,
     Declare,
+    If,
 
 
     EOF, // END OF FILE
@@ -42,7 +44,8 @@ const KEYWORDS: Record<string, TokenType> = {
     int: TokenType.Int,
     str: TokenType.Str,
     import: TokenType.Import,
-    declare: TokenType.Declare
+    declare: TokenType.Declare,
+    if: TokenType.If
 }
 
 export interface Token {
@@ -90,7 +93,13 @@ export function tokenize (sourceCode: string): Token[] {
         } else if (src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/" || src[0] == "%") {
             tokens.push(token(src.shift(), TokenType.BinaryOperator));
         } else if (src[0] == "=") {
-            tokens.push(token(src.shift(), TokenType.Equals));
+            const equals = src.shift();
+            if (src[0] == "=") {
+                src.shift()
+                tokens.push(token("==", TokenType.Equals2))
+            } else {
+                tokens.push(token(equals, TokenType.Equals));
+            }
         } else if (src[0] == ";") {
             tokens.push(token(src.shift(), TokenType.Semicolon));
         } else if (src[0] == ":") {

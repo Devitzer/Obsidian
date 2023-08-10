@@ -16,6 +16,7 @@ MemberExpr,
 ImportDeclaration,
 FunctionDeclaration, 
 StaticTypes,
+IfDeclaration,
 } from "./ast.ts";
 import { tokenize, Token, TokenType } from "./lexer.ts";
 
@@ -72,6 +73,8 @@ export default class Parser {
                 return this.parse_import_declaration();
             case TokenType.Declare:
                 return this.parse_declare();
+            case TokenType.If:
+                return this.parse_if_stmt();
             default:
                 return this.parse_expr();
         }
@@ -107,6 +110,31 @@ export default class Parser {
             parameters: params
         } as FunctionDeclaration;
 
+        return declare;
+    }
+
+    private parse_if_stmt(): Stmt {
+        this.eat(); // eat past the if keyword
+        const test: Expr[] = [];
+
+        while (this.at().type !== TokenType.OpenBrace && this.at().type !== TokenType.EOF) {
+            test.push(this.parse_expr());
+        }
+
+        this.expect(TokenType.OpenBrace, "Expected opening brace >> { << after an if test.");
+        
+        const body: Stmt[] = [];
+
+        while (this.at().type !== TokenType.CloseBrace && this.at().type !== TokenType.EOF) {
+            body.push(this.parse_stmt());
+        }
+
+        this.expect(TokenType.CloseBrace, "Expected closing brace for an if keyword's body.");
+        const declare = {
+            kind: "IfDeclaration",
+            test,
+            body,
+        } as IfDeclaration
         return declare;
     }
 
@@ -194,7 +222,7 @@ export default class Parser {
 
     private parse_object_expr(): Expr {
         if (this.at().type !== TokenType.OpenBrace) {
-            return this.parse_additive_expr();
+            return this.parse_conditions_expr();
         }
 
         this.eat(); // eat open brace
@@ -223,6 +251,25 @@ export default class Parser {
 
         this.expect(TokenType.CloseBrace, "An object requires a closing brace: '}'.");
         return { kind: "ObjectLiteral", properties } as ObjectLiteral
+    }
+
+    private parse_conditions_expr(): Expr {
+        let left = this.parse_additive_expr();
+
+        while (this.at().type === TokenType.Equals2) {
+            const operator = this.eat().value;
+
+            const right = this.parse_additive_expr();
+            left = {
+                kind: "BinaryExpr",
+                left,
+                right,
+                operator,
+                
+            } as BinaryExpr;
+        }
+
+        return left;
     }
 
     private parse_additive_expr (): Expr {
@@ -379,7 +426,7 @@ export default class Parser {
                 console.error("Unexpected token found during parsing: ", this.at());
                 Deno.exit(1);
                 // Trick the compiler for TS
-                return {} as Stmt;
+                return {} as Stmt
         }
     }
 }

@@ -1,3 +1,8 @@
 # In this file, you will see usually the newest features or an empty file.
 
-io.print(void)
+let x = 5
+let y = 5
+
+if x == y {
+    io.print("Hello!")
+}
