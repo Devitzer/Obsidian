@@ -4,7 +4,6 @@ import { evaluate } from "../interpreter.ts";
 import { RuntimeVal, MK_NULL, MK_NATIVE_FN, MK_OBJECT, FunctionValue, MK_BOOL, BooleanVal } from "../values.ts";
 import Native from "../../NativeFunctions/all.ts";
 import { areObjectsEqual } from "../../helpers/objects.ts";
-import { binary } from "https://deno.land/std@0.197.0/yaml/_type/binary.ts";
 
 export function eval_program (program: Program, env: Environment): RuntimeVal {
     let lastEvaluated: RuntimeVal = MK_NULL();
