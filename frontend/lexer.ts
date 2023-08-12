@@ -33,6 +33,10 @@ export enum TokenType {
     Str,
     Declare,
     If,
+    Else,
+    Or,
+    And,
+    Export,
 
 
     EOF, // END OF FILE
@@ -45,7 +49,11 @@ const KEYWORDS: Record<string, TokenType> = {
     str: TokenType.Str,
     import: TokenType.Import,
     declare: TokenType.Declare,
-    if: TokenType.If
+    if: TokenType.If,
+    else: TokenType.Else,
+    or: TokenType.Or, // TODO: add this to if statement
+    and: TokenType.And, // TODO: add this to if statement
+    export: TokenType.Export // TODO: make this work
 }
 
 export interface Token {

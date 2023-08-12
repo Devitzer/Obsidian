@@ -1,9 +1,20 @@
-import { FunctionDeclaration, ImportDeclaration, Program, VarDeclaration, IfDeclaration, BinaryExpr } from "../../frontend/ast.ts";
+import { FunctionDeclaration, ImportDeclaration, Program, VarDeclaration, IfDeclaration, BinaryExpr, BlockStatement } from "../../frontend/ast.ts";
 import Environment from "../environment.ts";
 import { evaluate } from "../interpreter.ts";
 import { RuntimeVal, MK_NULL, MK_NATIVE_FN, MK_OBJECT, FunctionValue, MK_BOOL, BooleanVal } from "../values.ts";
 import Native from "../../NativeFunctions/all.ts";
 import { areObjectsEqual } from "../../helpers/objects.ts";
+
+function eval_if_test(binaryexpr: BinaryExpr, env: Environment): BooleanVal {
+        const evaled = evaluate(binaryexpr.left, env);
+        const evaled2 = evaluate(binaryexpr.right, env);
+
+        if (areObjectsEqual(evaled, evaled2)) {
+            return MK_BOOL(true);
+        } else {
+            return MK_BOOL(false)
+        }
+}
 
 export function eval_program (program: Program, env: Environment): RuntimeVal {
     let lastEvaluated: RuntimeVal = MK_NULL();
@@ -48,7 +59,7 @@ export function eval_function_declaration(declaration: FunctionDeclaration, env:
     return env.declareVar(declaration.name, fn, true);
 }
 
-export function eval_if_stmt(ifStmt: IfDeclaration, env: Environment): RuntimeVal {
+export function eval_if_stmt(ifStmt: IfDeclaration, env: Environment): BooleanVal {
     // Testing if the condition of the ifStmt is true.
     let test: BooleanVal = MK_BOOL(false);
 
@@ -60,20 +71,28 @@ export function eval_if_stmt(ifStmt: IfDeclaration, env: Environment): RuntimeVa
         const binaryexpr = expr as BinaryExpr
 
         switch (binaryexpr.operator) {
-            case "==":
-                if (binaryexpr.left.kind == binaryexpr.right.kind) {
-                    const evaled = evaluate(binaryexpr.left, env);
-                    const evaled2 = evaluate(binaryexpr.right, env);
+            case "==": {
+                test = eval_if_test(binaryexpr, env);
+                if (test.value === true) {
+                    break
+                }
+                let ifStmtNONULL: BlockStatement | IfDeclaration | undefined;
+                
+                if (ifStmt.alternate !== null) {
+                    ifStmtNONULL = ifStmt.alternate as BlockStatement | IfDeclaration;
+                }
 
-                    if (areObjectsEqual(evaled, evaled2)) {
-                        test = MK_BOOL(true);
-                    } else {
-                        test = MK_BOOL(false)
+                if (ifStmtNONULL?.kind === "IfDeclaration") {
+                    const alternateAsIf = ifStmt.alternate as IfDeclaration;
+                    eval_if_stmt(alternateAsIf, env);
+                } else if (ifStmtNONULL?.kind === "BlockStatement" && test.value === false) {
+                    const alternateAsBlock = ifStmt.alternate as BlockStatement
+                    for (const stmt of alternateAsBlock.body) {
+                        evaluate(stmt, env);
                     }
-                } else {
-                    test = MK_BOOL(false);
                 }
                 break
+            }
             
             default:
                 throw `Operator not allowed to be used in If Statement.`
@@ -81,8 +100,8 @@ export function eval_if_stmt(ifStmt: IfDeclaration, env: Environment): RuntimeVa
     }
 
     if (test.value === true) {
-        for (const stmt of ifStmt.body) {
-            evaluate(stmt, env);    
+        for (const stmt of ifStmt.body.body) {
+            evaluate(stmt, env);   
         }
     }
 

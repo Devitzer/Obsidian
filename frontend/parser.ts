@@ -17,6 +17,7 @@ ImportDeclaration,
 FunctionDeclaration, 
 StaticTypes,
 IfDeclaration,
+BlockStatement,
 } from "./ast.ts";
 import { tokenize, Token, TokenType } from "./lexer.ts";
 
@@ -75,6 +76,8 @@ export default class Parser {
                 return this.parse_declare();
             case TokenType.If:
                 return this.parse_if_stmt();
+            case TokenType.Export:
+                return this.parse_export_declaration();
             default:
                 return this.parse_expr();
         }
@@ -123,18 +126,41 @@ export default class Parser {
 
         this.expect(TokenType.OpenBrace, "Expected opening brace >> { << after an if test.");
         
-        const body: Stmt[] = [];
+        const body = {
+            kind: "BlockStatement",
+            body: []
+        } as BlockStatement
 
         while (this.at().type !== TokenType.CloseBrace && this.at().type !== TokenType.EOF) {
-            body.push(this.parse_stmt());
+            body.body.push(this.parse_stmt());
         }
 
-        this.expect(TokenType.CloseBrace, "Expected closing brace for an if keyword's body.");
         const declare = {
             kind: "IfDeclaration",
             test,
             body,
         } as IfDeclaration
+
+        this.expect(TokenType.CloseBrace, "Expected closing brace for an if keyword's body.");
+        if (this.at().type == TokenType.Else) {
+            this.eat(); // eat the else keyword
+            if (this.at().type == TokenType.If) {
+                declare.alternate = this.parse_if_stmt() as IfDeclaration;
+                return declare;
+            } else if (this.at().type == TokenType.OpenBrace) {
+                this.eat(); // eat the open brace
+                const body: BlockStatement = { kind: "BlockStatement", body: [] }
+                while (this.at().type !== TokenType.CloseBrace && this.at().type !== TokenType.EOF) {
+                    body.body.push(this.parse_stmt());
+                }
+
+                this.expect(TokenType.CloseBrace, "Expected closing brace for an else/else if keyword's body.");
+                declare.alternate = body;
+            } else {
+                throw `Expected "if" keyword or opening bracket >> { << after else.`
+            }
+        }
+
         return declare;
     }
 
@@ -152,6 +178,11 @@ export default class Parser {
 
     return { kind: "ImportDeclaration", builtInLibrary, identifier } as ImportDeclaration;
 
+    }
+
+    private parse_export_declaration(): Stmt {
+        this.eat(); // eat the export token
+        throw `The "export" feature doesn't work yet!`
     }
 
     private parse_var_declaration(): Stmt {

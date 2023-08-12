@@ -2,6 +2,7 @@
 export type NodeType = 
     // STATEMENTS
     | "Program"
+    | "BlockStatement"
     | "VarDeclaration"
     | "ImportDeclaration"
     | "FunctionDeclaration"
@@ -56,10 +57,16 @@ export interface FunctionDeclaration extends Stmt {
     body: Stmt[];
 }
 
+export interface BlockStatement extends Stmt {
+    kind: "BlockStatement";
+    body: Stmt[];
+}
+
 export interface IfDeclaration extends Stmt {
     kind: "IfDeclaration";
     test: Expr[];
-    body: Stmt[];
+    body: BlockStatement;
+    alternate: null | IfDeclaration | BlockStatement
 }
 
 export interface Expr extends Stmt {}

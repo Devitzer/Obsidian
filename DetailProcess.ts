@@ -15,10 +15,10 @@ async function run(filename: string) {
 
     const result = evaluate(program, env);
     console.log("LEXER: \n\n");
-    console.log(lexer);
+    console.dir(lexer);
     console.log("\n\nPARSER: \n\n");
-    console.log(program);
-    console.log("\n\nRESULT: \n\n");
-    console.log(result);
+    console.dir(program);
+    console.dir("\n\nRESULT: \n\n");
+    console.dir(result);
     // for when i need it
 }
