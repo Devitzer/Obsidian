@@ -170,6 +170,8 @@ export default class Parser {
     const identifier: string = this.at().value;
     if (identifier == "fs") {
         builtInLibrary = true;
+    } else if (identifier == "diagnostics") {
+        builtInLibrary = true;
     } else {
         throw `This language only supports built in libraries for now.`
     }

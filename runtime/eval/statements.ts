@@ -31,14 +31,18 @@ export function eval_var_declaration(declaration: VarDeclaration, env: Environme
 
 export function eval_import_declaration(declaration: ImportDeclaration, env: Environment): RuntimeVal {
     const fsObj: Map<string, RuntimeVal> = new Map();
-    let value: Map<string, RuntimeVal>;
-    value = fsObj;
+    const diagnosticsObj: Map<string, RuntimeVal> = new Map();
+    let value: Map<string, RuntimeVal> = new Map();
     if (declaration.builtInLibrary == true) {
         if (declaration.identifier == "fs") {
             fsObj.set("readFile", MK_NATIVE_FN(Native.fs.readFile));
             fsObj.set("writeFile", MK_NATIVE_FN(Native.fs.writeFile));
             fsObj.set("deleteFile", MK_NATIVE_FN(Native.fs.deleteFile));
             value = fsObj;
+        } else if (declaration.identifier == "diagnostics") {
+            diagnosticsObj.set("time", MK_NATIVE_FN(Native.diagnostics.time));
+            diagnosticsObj.set("timeEnd", MK_NATIVE_FN(Native.diagnostics.timeEnd));
+            value = diagnosticsObj;
         }
     }
 

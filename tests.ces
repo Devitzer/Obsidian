@@ -1,6 +1,17 @@
 # In this file, you will see usually the newest features or an empty file.
+# THIS FILE RUNS IN 1/2 MS ON AVERAGE, SAME AS JS WITH THE SAME TEST
+
+import diagnostics
+
+diagnostics.time("monk")
 
 let x = 5
 let y = 5
 
+if x == y {
+    io.print("Hello World!")
+} else {
+    io.print("Goodbye World!")
+}
 
+diagnostics.timeEnd("monk")
