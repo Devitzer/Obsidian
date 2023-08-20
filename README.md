@@ -1,6 +1,15 @@
 <p align="center">
 <img src="./Obsidian.png" width="200"></p>
 
+# WARNING!
+
+CitrineScript is deprecated, go to these instead.
+
+https://github.com/Devitzer/Obsidian
+https://github.com/Devitzer/obpl
+https://deno.land/x/obsidianlang
+https://deno.land/x/obpl
+
 # Obsidian
 
 The easy one.
@@ -15,7 +24,7 @@ You need to install [Deno.](https://deno.land/)
 
 ## 2. Installation
 
-To run Obsidian files (.ob), you need our runtime CLI, you don't actually need this too, because it comes packaged with the CLI, which is called OBPL (Obsidian Programming Language). So go to the [obpl repo](https://github.com/Devitzer/citrin) to get started.
+To run Obsidian files (.ob), you need our runtime CLI, you don't actually need this too, because it comes packaged with the CLI, which is called OBPL (Obsidian Programming Language). So go to the [obpl repo](https://github.com/Devitzer/obpl) to get started.
 
 ## 3. Running your files!
 
