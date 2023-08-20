@@ -188,7 +188,7 @@ export default class Parser {
     }
 
     private parse_var_declaration(): Stmt {
-        let type: StaticTypes | undefined;
+        let type: StaticTypes;
         if (this.at().type == TokenType.Let || this.at().type == TokenType.Static) {
             type = "dynamic";
         } else if (this.at().type == TokenType.Int) {
@@ -196,7 +196,7 @@ export default class Parser {
         } else if (this.at().type == TokenType.Str) {
             type = "str";
         } else {
-            type = undefined;
+            throw `Couldn't find the type of your declared variable, somehow. Please report this in GitHub Issues with your source code.`
         }
         const isStatic = this.eat().type == TokenType.Static;
         const identifier = this.expect(
@@ -204,7 +204,7 @@ export default class Parser {
             "Expected identifier following variable declaration keywords"
             ).value;
         
-        if (this.at().type == TokenType.Semicolon) {
+        if (this.at().type !== TokenType.Equals) {
             this.eat(); // expect semicolon
             if (isStatic) {
                 throw `Must assign value to static expression, if you meant to do it like this, use the other variable keywords instead.`

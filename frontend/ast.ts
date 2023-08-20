@@ -38,7 +38,7 @@ export interface Program extends Stmt {
 
 export interface VarDeclaration extends Stmt {
     kind: "VarDeclaration";
-    type?: StaticTypes;
+    type: StaticTypes;
     static: boolean;
     identifier: string;
     value?: Expr;

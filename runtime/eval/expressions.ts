@@ -38,7 +38,7 @@ export function eval_call_expr(expr: CallExpr, env: Environment): RuntimeVal {
             // TODO: Check the bounds here.
             // verify arity of function
             const varname = func.parameters[i];
-            scope.declareVar(varname, args[i], false);
+            scope.declareVar(varname, args[i], false, "dynamic");
         } 
 
         let result: RuntimeVal = MK_NULL();

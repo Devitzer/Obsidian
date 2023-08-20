@@ -1,14 +1,15 @@
 import createNativeFunctions from "../NativeFunctions/functions.ts";
 import { MK_BOOL, MK_NULL, MK_UNDEFINED, MK_VOID, RuntimeVal } from "./values.ts";
+import { StaticTypes } from "../frontend/ast.ts";
 
 export function createGlobalEnv() {
     const env = new Environment();
     // default env stuff
-    env.declareVar("true", MK_BOOL(true), true);
-    env.declareVar("false", MK_BOOL(false), true);
-    env.declareVar("null", MK_NULL(), true);
-    env.declareVar("void", MK_VOID(), true);
-    env.declareVar("undefined", MK_UNDEFINED(), true);
+    env.declareVar("true", MK_BOOL(true), true, "dynamic");
+    env.declareVar("false", MK_BOOL(false), true, "dynamic");
+    env.declareVar("null", MK_NULL(), true, "dynamic");
+    env.declareVar("void", MK_VOID(), true, "dynamic");
+    env.declareVar("undefined", MK_UNDEFINED(), true, "dynamic");
 
     // native functions
     createNativeFunctions(env);
@@ -20,14 +21,19 @@ export default class Environment {
     private parent?: Environment;
     private variables: Map<string, RuntimeVal>;
     private statics: Set<string>
+    private types: Record<string, {
+        type: StaticTypes,
+        varname: string
+    }>;
 
     constructor (parentENV?: Environment) {
         this.parent = parentENV;
         this.variables = new Map();
         this.statics = new Set();
+        this.types = {};
     }
     
-    public declareVar (varname: string, value: RuntimeVal, isStatic: boolean): RuntimeVal {
+    public declareVar (varname: string, value: RuntimeVal, isStatic: boolean, type: StaticTypes): RuntimeVal {
         if (this.variables.has(varname)) {
             if (this.variables.get(varname)?.type == "native-fn") {
                 throw `You cannot name a variable on top of a native function.`;
@@ -37,6 +43,7 @@ export default class Environment {
         }
 
         this.variables.set(varname, value);
+        this.types[varname] = { varname: varname, type }
 
         if (isStatic)
             this.statics.add(varname);
@@ -50,6 +57,15 @@ export default class Environment {
         if (env.statics.has(varname)) {
             throw `The variable '${varname}' is a static variable. If you need to change this variable, please use var | let instead.`
         }
+
+        const type = this.types[varname];
+
+        if (value.type !== "string" && type.type === "str") {
+            throw `You tried to reassign a string variable with a value which was not a string.`;
+        } else if (value.type !== "number" && type.type === "int") {
+            throw `You tried to reassign a number variable with a value which was not a number.`;
+        }
+
         env.variables.set(varname, value);
         return value;
     }

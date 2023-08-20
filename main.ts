@@ -2,6 +2,8 @@ import Parser from "./frontend/parser.ts";
 import { createGlobalEnv } from "./runtime/environment.ts";
 import { evaluate } from "./runtime/interpreter.ts";
 
+run("tests.ob");
+
 export async function run(filename: string) {
     const parser = new Parser();
     const env = createGlobalEnv();
@@ -17,7 +19,7 @@ export function repl () {
     const parser = new Parser();
     const env = createGlobalEnv();
 
-    console.log("\nCitrineScript Repl v0.1, Type 'DONE' when done.");
+    console.log("\nObsidian Repl v0.1, Type 'DONE' when done.");
     let code = "";
     while (true) {
 

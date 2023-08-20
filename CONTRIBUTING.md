@@ -1,6 +1,6 @@
 # Contributing
 
-To contribute, fork then make a pull request. If you are unfamiliar with this, here are 2 articles about it, in order of how to do this.
+To contribute, fork this repository then make a pull request. If you are unfamiliar with this, here are 2 articles about it, in order of how to do this.
 
 ## 1.
 

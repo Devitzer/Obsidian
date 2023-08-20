@@ -24,6 +24,8 @@ export enum TokenType {
     Dot, // .
     BinaryOperator, // + - / % *
     Semicolon, // ;
+    Escape, // backslash (\)
+    // TODO: ^^^ Make this work
 
     // Keywords
     Let,
@@ -110,6 +112,8 @@ export function tokenize (sourceCode: string): Token[] {
             }
         } else if (src[0] == ";") {
             tokens.push(token(src.shift(), TokenType.Semicolon));
+        } else if (src[0] == "\\") {
+            tokens.push(token(src.shift(), TokenType.Escape));
         } else if (src[0] == ":") {
             tokens.push(token(src.shift(), TokenType.Colon));
         } else if (src[0] == "{") {

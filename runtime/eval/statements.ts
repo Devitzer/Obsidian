@@ -26,7 +26,7 @@ export function eval_program (program: Program, env: Environment): RuntimeVal {
 
 export function eval_var_declaration(declaration: VarDeclaration, env: Environment): RuntimeVal {
     const value = declaration.value ? evaluate(declaration.value, env) : MK_NULL();
-    return env.declareVar(declaration.identifier, value, declaration.static);
+    return env.declareVar(declaration.identifier, value, declaration.static, declaration.type);
 }
 
 export function eval_import_declaration(declaration: ImportDeclaration, env: Environment): RuntimeVal {
@@ -46,7 +46,7 @@ export function eval_import_declaration(declaration: ImportDeclaration, env: Env
         }
     }
 
-    return env.declareVar(declaration.identifier, MK_OBJECT(value), true);
+    return env.declareVar(declaration.identifier, MK_OBJECT(value), true, "dynamic");
 }
 
 export function eval_function_declaration(declaration: FunctionDeclaration, env: Environment): RuntimeVal {
@@ -60,7 +60,7 @@ export function eval_function_declaration(declaration: FunctionDeclaration, env:
         body: declaration.body
     } as FunctionValue;
 
-    return env.declareVar(declaration.name, fn, true);
+    return env.declareVar(declaration.name, fn, true, "dynamic");
 }
 
 export function eval_if_stmt(ifStmt: IfDeclaration, env: Environment): BooleanVal {
