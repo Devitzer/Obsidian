@@ -1,11 +1,9 @@
 import Parser from "./frontend/parser.ts";
 import { createGlobalEnv } from "./runtime/environment.ts";
 import { evaluate } from "./runtime/interpreter.ts";
-import { tokenize } from "./frontend/lexer.ts";
+import { tokenize } from "./frontend/lexer.ts"
 
-run("tests.ces");
-
-async function run(filename: string) {
+export async function run(filename: string) {
     const parser = new Parser();
     const env = createGlobalEnv();
 

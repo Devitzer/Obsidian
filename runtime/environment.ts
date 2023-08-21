@@ -43,7 +43,7 @@ export default class Environment {
         }
 
         this.variables.set(varname, value);
-        this.types[varname] = { varname: varname, type }
+        this.types[varname] = { varname, type }
 
         if (isStatic)
             this.statics.add(varname);
@@ -64,6 +64,10 @@ export default class Environment {
             throw `You tried to reassign a string variable with a value which was not a string.`;
         } else if (value.type !== "number" && type.type === "int") {
             throw `You tried to reassign a number variable with a value which was not a number.`;
+        } else if (value.type !== "object" && type.type === "obj") {
+            throw `You tried to reassign an object variable with a value which was not an object.`;
+        } else if (value.type !== "boolean" && type.type === "bool") {
+            throw `You tried to reassign a boolean variable with a value which was not a boolean.`
         }
 
         env.variables.set(varname, value);

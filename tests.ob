@@ -1,0 +1,9 @@
+obj monki = {
+    myProperty1: "this is the first property",
+    myProperty2: "this is the second property"
+}
+monki = {
+    myProperty1: "this is the first property modified"
+}
+
+io.print(monki.myProperty1)

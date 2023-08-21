@@ -25,6 +25,8 @@ export type StaticTypes =
     // The static types, such as int or str
     | "int"
     | "str"
+    | "bool"
+    | "obj"
     | "dynamic";
 
 export interface Stmt {

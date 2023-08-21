@@ -6,18 +6,18 @@ import {
     BinaryExpr, 
     NumericLiteral, 
     Identifier,
-VarDeclaration,
-AssignmentExpr,
-Property,
-ObjectLiteral,
-StringLiteral,
-CallExpr,
-MemberExpr,
-ImportDeclaration,
-FunctionDeclaration, 
-StaticTypes,
-IfDeclaration,
-BlockStatement,
+    VarDeclaration,
+    AssignmentExpr,
+    Property,
+    ObjectLiteral,
+    StringLiteral,
+    CallExpr,
+    MemberExpr,
+    ImportDeclaration,
+    FunctionDeclaration, 
+    StaticTypes,
+    IfDeclaration,
+    BlockStatement,
 } from "./ast.ts";
 import { tokenize, Token, TokenType } from "./lexer.ts";
 
@@ -69,6 +69,8 @@ export default class Parser {
             case TokenType.Static:
             case TokenType.Int:
             case TokenType.Str:
+            case TokenType.Obj:
+            case TokenType.Bool:
                 return this.parse_var_declaration();
             case TokenType.Import:
                 return this.parse_import_declaration();
@@ -195,6 +197,10 @@ export default class Parser {
             type = "int";
         } else if (this.at().type == TokenType.Str) {
             type = "str";
+        } else if (this.at().type == TokenType.Bool) {
+            type = "bool";
+        } else if (this.at().type == TokenType.Obj) {
+            type = "obj";
         } else {
             throw `Couldn't find the type of your declared variable, somehow. Please report this in GitHub Issues with your source code.`
         }
@@ -217,18 +223,32 @@ export default class Parser {
         const value = this.parse_expr();
         const str = value as StringLiteral;
         const int = value as NumericLiteral;
-        let finalChoice: Expr | undefined;
+        const obj = value as ObjectLiteral;
+        const bool = value as Identifier;
+        let finalChoice: Expr;
 
-        if (type === "int" && value.kind !== "NumericLiteral") {
-            throw `You gave an "int" variable, and the value was NaN.`;
-        } else if (type === "str" && value.kind !== "StringLiteral") {
-            throw `You gave a "str" variable, and the value was not a string.`
+        if (type !== "dynamic") {
+            if (type === "int" && value.kind !== "NumericLiteral") {
+                throw `You gave an "int" variable, and the value was NaN.`;
+            } else if (type === "str" && value.kind !== "StringLiteral") {
+                throw `You gave a "str" variable, and the value was not a string.`;
+            } else if (type === "obj" && value.kind !== "ObjectLiteral") {
+                throw `You gave an "obj" variable, and the value was not an object.`;
+            } else if (type === "bool" && value.kind !== "Identifier") {
+                throw `The bool value you gave was not an Identifier! If you're confused, true/false counts as an Identifier until evaluated. But we do validate whether the identifier is true/false.`
+            } else if (bool.symbol !== "true" && bool.symbol !== "false" && bool.symbol !== undefined) {
+                throw `You gave a "bool" keyword and the value was not true/false`;
+            }
         }
 
         if (type === "int") {
             finalChoice = int;
         } else if (type === "str") {
             finalChoice = str
+        } else if (type === "bool") {
+            finalChoice = bool;
+        } else if (type === "obj") {
+            finalChoice = obj;
         } else {
             finalChoice = value;
         }
