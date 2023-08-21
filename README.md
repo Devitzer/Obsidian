@@ -1,15 +1,6 @@
 <p align="center">
 <img src="./Obsidian.png" width="200"></p>
 
-# WARNING!
-
-CitrineScript is deprecated, go to these instead.
-
-https://github.com/Devitzer/Obsidian
-https://github.com/Devitzer/obpl
-https://deno.land/x/obsidianlang
-https://deno.land/x/obpl
-
 # Obsidian
 
 The easy one.
@@ -66,7 +57,7 @@ I think you get the point.
 
 # Resources
 
-Obsidian Official Documentation: https://obsidian.geodax.ca/
+Obsidian Official Documentation: https://citrine.geodax.ca/
 
 [Here's](./CONTRIBUTING.md) how to contribute.
 
