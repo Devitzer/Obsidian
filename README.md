@@ -57,7 +57,7 @@ I think you get the point.
 
 # Resources
 
-Obsidian Official Documentation: https://citrine.geodax.ca/
+Obsidian Official Documentation: https://obsidian.geodax.ca/
 
 [Here's](./CONTRIBUTING.md) how to contribute.
 
