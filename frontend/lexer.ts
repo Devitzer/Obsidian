@@ -25,7 +25,6 @@ export enum TokenType {
     BinaryOperator, // + - / % *
     Semicolon, // ;
     Escape, // backslash (\)
-    // TODO: ^^^ Make this work
 
     // Keywords
     Let,

@@ -1,0 +1,8 @@
+int myInt = 5
+int myInt2 = 6
+
+export declare myFunction(msg) {
+    io.print(msg)
+}
+
+export { myInt, myInt2 }

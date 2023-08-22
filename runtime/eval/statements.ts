@@ -1,9 +1,10 @@
-import { FunctionDeclaration, ImportDeclaration, Program, VarDeclaration, IfDeclaration, BinaryExpr, BlockStatement } from "../../frontend/ast.ts";
+import { FunctionDeclaration, ImportDeclaration, Program, VarDeclaration, IfDeclaration, BinaryExpr, BlockStatement, ExportDeclaration, Identifier } from "../../frontend/ast.ts";
 import Environment from "../environment.ts";
 import { evaluate } from "../interpreter.ts";
-import { RuntimeVal, MK_NULL, MK_NATIVE_FN, MK_OBJECT, FunctionValue, MK_BOOL, BooleanVal } from "../values.ts";
+import { RuntimeVal, MK_NULL, MK_NATIVE_FN, MK_OBJECT, FunctionValue, MK_BOOL, BooleanVal, MK_VOID } from "../values.ts";
 import Native from "../../NativeFunctions/all.ts";
 import { areObjectsEqual } from "../../helpers/objects.ts";
+import Parser from "../../frontend/parser.ts";
 
 function eval_if_test(binaryexpr: BinaryExpr, env: Environment): BooleanVal {
         const evaled = evaluate(binaryexpr.left, env);
@@ -44,9 +45,57 @@ export function eval_import_declaration(declaration: ImportDeclaration, env: Env
             diagnosticsObj.set("timeEnd", MK_NATIVE_FN(Native.diagnostics.timeEnd));
             value = diagnosticsObj;
         }
+    } else {
+        const module = Deno.readTextFileSync(declaration.identifier);
+        const parseModule = new Parser();
+        const program = parseModule.produceAST(module);
+        for (const stmt of program.body) {
+            if (stmt.kind === "ExportDeclaration") {
+            const exportModule = stmt as ExportDeclaration;
+            let exportedStuff: FunctionDeclaration | Identifier[];
+            const specAsFunc = exportModule.specifiers as FunctionDeclaration;
+            const specAsIdentArr = exportModule.specifiers as Identifier[];
+            
+            if (specAsFunc.name !== undefined) {
+                exportedStuff = specAsFunc;
+                value.set(exportedStuff.name, evaluate(exportedStuff, env));
+            } else if (specAsIdentArr[0].symbol !== undefined) {
+                exportedStuff = specAsIdentArr;
+                for (let i = 0; i < exportedStuff.length; i++) {
+                    value.set(exportedStuff[i].symbol, evaluate(exportedStuff[i], env));
+                }
+            } else {
+                throw `Couldn't nail down exported stuff's type, here is what we got for reference: ` + exportModule.specifiers;
+            }
+        } else if (stmt.kind === "VarDeclaration") {
+            const declaration = stmt as VarDeclaration
+            value.set(declaration.identifier, evaluate(declaration, env));
+        } else if (stmt.kind === "FunctionDeclaration") {
+            const declaration = stmt as FunctionDeclaration;
+            value.set(declaration.name, evaluate(declaration, env));
+        }
     }
+}
 
     return env.declareVar(declaration.identifier, MK_OBJECT(value), true, "dynamic");
+}
+
+export function eval_export_declaration(declaration: ExportDeclaration, env: Environment): RuntimeVal {
+    let exportedStuff: FunctionDeclaration | Identifier[];
+    const specAsFunc = declaration.specifiers as FunctionDeclaration;
+    const specAsIdentArr = declaration.specifiers as Identifier[];
+    if (specAsFunc.name !== undefined) {
+        exportedStuff = specAsFunc;
+        return evaluate(exportedStuff, env);
+    } else if (specAsIdentArr[0].symbol !== undefined) {
+        exportedStuff = specAsIdentArr;
+        for (let i = 0; i < exportedStuff.length; i++) {
+            return evaluate(exportedStuff[i], env);
+        }
+    } else {
+        throw `Couldn't nail down exported stuff's type, here is what we got for reference: ` + declaration.specifiers;
+    }
+    return MK_VOID();
 }
 
 export function eval_function_declaration(declaration: FunctionDeclaration, env: Environment): RuntimeVal {

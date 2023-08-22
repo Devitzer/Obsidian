@@ -5,6 +5,7 @@ export type NodeType =
     | "BlockStatement"
     | "VarDeclaration"
     | "ImportDeclaration"
+    | "ExportDeclaration"
     | "FunctionDeclaration"
     | "IfDeclaration"
 
@@ -50,6 +51,11 @@ export interface ImportDeclaration extends Stmt {
     kind: "ImportDeclaration"
     builtInLibrary: boolean;
     identifier: string;
+}
+
+export interface ExportDeclaration extends Stmt {
+    kind: "ExportDeclaration";
+    specifiers?: Identifier[] | FunctionDeclaration;
 }
 
 export interface FunctionDeclaration extends Stmt {

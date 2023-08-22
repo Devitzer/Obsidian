@@ -18,6 +18,7 @@ import {
     StaticTypes,
     IfDeclaration,
     BlockStatement,
+ExportDeclaration,
 } from "./ast.ts";
 import { tokenize, Token, TokenType } from "./lexer.ts";
 
@@ -175,7 +176,7 @@ export default class Parser {
     } else if (identifier == "diagnostics") {
         builtInLibrary = true;
     } else {
-        throw `This language only supports built in libraries for now.`
+        builtInLibrary = false
     }
 
     this.eat(); // eat past identifier
@@ -186,7 +187,42 @@ export default class Parser {
 
     private parse_export_declaration(): Stmt {
         this.eat(); // eat the export token
-        throw `The "export" feature doesn't work yet!`
+        let value: FunctionDeclaration | Identifier[];
+
+        if (this.at().type === TokenType.OpenBrace) {
+            this.eat(); // eat open brace
+            value = this.parse_export_identarr();
+        } else if (this.at().type === TokenType.Declare) {
+            value = this.parse_declare() as FunctionDeclaration;
+        } else {
+            throw `After export keyword, you must give a function declaration or an identifier array, like { myFuncion, myOtherFunction }`;
+        }
+
+        return {
+            kind: "ExportDeclaration",
+            specifiers: value
+        } as ExportDeclaration
+    }
+
+    private parse_export_identarr(): Identifier[] {
+        const identarr: Identifier[] = [];
+        while (this.at().type !== TokenType.CloseBrace) {
+            if (this.at().type === TokenType.Identifier) {
+                identarr.push(this.parse_expr() as Identifier);
+                const test = this.at();
+                if (test.type !== TokenType.Comma && test.type !== TokenType.CloseBrace) {
+                    throw `Expected comma or closing brace following identifier`
+                }
+                if (test.type === TokenType.Comma) {
+                    this.eat(); // eat past the comma
+                }
+            } else {
+                throw `Expected identifiers inside export array.`
+            }
+        }
+        this.expect(TokenType.CloseBrace, "Expected closing brace after export declaration, got EOF");
+
+        return identarr;
     }
 
     private parse_var_declaration(): Stmt {

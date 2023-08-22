@@ -2,10 +2,10 @@
 
 // This file is technically a compiler, not an interpreter. Interpreter just sounds better
 import { RuntimeVal, NumberVal, StringVal } from "./values.ts";
-import { BinaryExpr, NodeType, NumericLiteral, Program, Stmt, Identifier, VarDeclaration, AssignmentExpr, StringLiteral, ObjectLiteral, CallExpr, MemberExpr, ImportDeclaration, FunctionDeclaration, IfDeclaration } from "../frontend/ast.ts";
+import { BinaryExpr, NodeType, NumericLiteral, Program, Stmt, Identifier, VarDeclaration, AssignmentExpr, StringLiteral, ObjectLiteral, CallExpr, MemberExpr, ImportDeclaration, FunctionDeclaration, IfDeclaration, ExportDeclaration } from "../frontend/ast.ts";
 import Environment from "./environment.ts";
 import { eval_identifier, eval_binary_expr, eval_assignment, eval_object_expr, eval_call_expr, eval_member_expr } from "./eval/expressions.ts";
-import { eval_program, eval_var_declaration, eval_import_declaration, eval_function_declaration, eval_if_stmt } from "./eval/statements.ts";
+import { eval_program, eval_var_declaration, eval_import_declaration, eval_function_declaration, eval_if_stmt, eval_export_declaration } from "./eval/statements.ts";
 
 export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
     switch (astNode.kind) {
@@ -38,6 +38,8 @@ export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
             return eval_function_declaration(astNode as FunctionDeclaration, env);
         case "IfDeclaration":
             return eval_if_stmt(astNode as IfDeclaration, env);
+        case "ExportDeclaration":
+            return eval_export_declaration(astNode as ExportDeclaration, env);
 
         default:
             console.error("This AST node has not yet been setup for interpretation. \n", astNode);
