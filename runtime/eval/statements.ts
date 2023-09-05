@@ -46,9 +46,12 @@ export function eval_import_declaration(declaration: ImportDeclaration, env: Env
             value = diagnosticsObj;
         }
     } else {
+        throw `You can not import user made modules yet, there is issues making it not work as expected and I am working on this when I can.`;
+        /*
         const module = Deno.readTextFileSync(declaration.identifier);
         const parseModule = new Parser();
         const program = parseModule.produceAST(module);
+        const temp = new Map();
         for (const stmt of program.body) {
             if (stmt.kind === "ExportDeclaration") {
             const exportModule = stmt as ExportDeclaration;
@@ -62,25 +65,32 @@ export function eval_import_declaration(declaration: ImportDeclaration, env: Env
             } else if (specAsIdentArr[0].symbol !== undefined) {
                 exportedStuff = specAsIdentArr;
                 for (let i = 0; i < exportedStuff.length; i++) {
-                    value.set(exportedStuff[i].symbol, evaluate(exportedStuff[i], env));
+                    value.set(exportedStuff[i].symbol, temp.get(exportedStuff[i].symbol));
+                    console.log(exportedStuff[i].symbol);
                 }
             } else {
                 throw `Couldn't nail down exported stuff's type, here is what we got for reference: ` + exportModule.specifiers;
             }
         } else if (stmt.kind === "VarDeclaration") {
             const declaration = stmt as VarDeclaration
-            value.set(declaration.identifier, evaluate(declaration, env));
+            temp.set(declaration.identifier, evaluate(declaration, env));
+            console.log(declaration.identifier);
         } else if (stmt.kind === "FunctionDeclaration") {
             const declaration = stmt as FunctionDeclaration;
-            value.set(declaration.name, evaluate(declaration, env));
+            temp.set(declaration.name, evaluate(declaration, env));
+            
         }
-    }
+    } */
+
+    
 }
 
     return env.declareVar(declaration.identifier, MK_OBJECT(value), true, "dynamic");
 }
 
 export function eval_export_declaration(declaration: ExportDeclaration, env: Environment): RuntimeVal {
+    throw `The export keyword has been temporarily put out of use due to it not working unexpectedly, I am working on this when I can to try and solve the issue.`
+    /*
     let exportedStuff: FunctionDeclaration | Identifier[];
     const specAsFunc = declaration.specifiers as FunctionDeclaration;
     const specAsIdentArr = declaration.specifiers as Identifier[];
@@ -96,6 +106,7 @@ export function eval_export_declaration(declaration: ExportDeclaration, env: Env
         throw `Couldn't nail down exported stuff's type, here is what we got for reference: ` + declaration.specifiers;
     }
     return MK_VOID();
+    */
 }
 
 export function eval_function_declaration(declaration: FunctionDeclaration, env: Environment): RuntimeVal {

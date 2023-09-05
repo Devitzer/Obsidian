@@ -88,4 +88,9 @@ export default class Environment {
 
         return this.parent.resolve(varname);
     }
+
+    public deleteVar(varname: string) {
+        const env = this.resolve(varname);
+        env.variables.delete(varname);
+    }
 }

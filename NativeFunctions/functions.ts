@@ -17,14 +17,19 @@ export default function createNativeFunctions(env: Environment) {
     parseObj.set("json", MK_NATIVE_FN(Native.parse.json));
     parseObj.set("yaml", MK_NATIVE_FN(Native.parse.yaml));
     parseObj.set("toml", MK_NATIVE_FN(Native.parse.toml));
+    const mathObj: Map<string, RuntimeVal> = new Map();
+    mathObj.set("floor", MK_NATIVE_FN(Native.Math.floor));
+    mathObj.set("round", MK_NATIVE_FN(Native.Math.round));
     
     // STDIO FUNCS
-    env.declareVar("io", MK_OBJECT(ioObj), true);
+    env.declareVar("io", MK_OBJECT(ioObj), true, "obj");
     // DATE FUNCS
-    env.declareVar("Date", MK_OBJECT(timeObj), true);
+    env.declareVar("Date", MK_OBJECT(timeObj), true, "obj");
     // SYS FUNCS
-    env.declareVar("sys", MK_OBJECT(sysObj), true);
+    env.declareVar("sys", MK_OBJECT(sysObj), true, "obj");
     // PARSE FUNCS
-    env.declareVar("parse", MK_OBJECT(parseObj), true);
+    env.declareVar("parse", MK_OBJECT(parseObj), true, "obj");
+    // MATH FUNCS
+    env.declareVar("Math", MK_OBJECT(mathObj), true, "obj");
 
 }

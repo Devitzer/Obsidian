@@ -1,8 +1,9 @@
 int myInt = 5
 int myInt2 = 6
+int myInt3 = 123
 
-export declare myFunction(msg) {
+declare myFunction(msg) {
     io.print(msg)
 }
 
-export { myInt, myInt2 }
+export { myInt, myInt2, myFunction }

@@ -4,6 +4,7 @@ import sys from "./sys/all.ts";
 import fs from "./fs/all.ts";
 import parse from "./parse/all.ts";
 import diagnostics from "./diagnostics/all.ts";
+import Math from "./Math/all.ts";
 
 const Native = {
     io,
@@ -11,7 +12,8 @@ const Native = {
     sys,
     fs,
     parse,
-    diagnostics
+    diagnostics,
+    Math,
 }
 
 export default Native;
